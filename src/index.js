@@ -1,0 +1,110 @@
+import React from "react";
+import ReactDOM from "react-dom/client";
+import { pizzaData } from "./data.js";
+import "./index.css";
+
+// ------------------------------------------------------------
+function App() {
+  return (
+    <div className="container">
+      <Header />
+      <Menu />
+      <Footer />
+    </div>
+  );
+}
+
+// ------------------------------------------------------------
+
+function Header() {
+  return (
+    <header className="header">
+      <h1>Fast react pizza co.</h1>
+    </header>
+  );
+}
+
+// ------------------------------------------------------------
+
+function Menu() {
+  return (
+    <main className="menu">
+      <h2>Our Menu</h2>
+
+      {pizzaData.length > 0 ? (
+        <>
+          <p>
+            Authentic Italian cuisine. 6 creative dishes to choose from. All
+            from our stone oven, all organic, all delicious.
+          </p>
+          <ul className="pizzas">
+            {pizzaData.map((pizza) => (
+              <Pizza pizzaObj={pizza} key={pizza.name} />
+            ))}
+          </ul>
+        </>
+      ) : (
+        <p>We're still working on our menu. Please come back later.</p>
+      )}
+    </main>
+  );
+}
+
+// ------------------------------------------------------------
+
+function Pizza(props) {
+  return (
+    <li className={`pizza ${props.pizzaObj.soldOut? "sold-out":""}`}>
+      <img src={props.pizzaObj.photoName} alt={props.pizzaObj.name} />
+      <div>
+        <h3>{props.pizzaObj.name}</h3>
+        <p>{props.pizzaObj.ingredients}</p>
+        <span>{!props.pizzaObj.soldOut? props.pizzaObj.price: "Sold Out"}</span>
+      </div>
+    </li>
+  );
+}
+
+// ------------------------------------------------------------
+
+function Footer() {
+  const date = new Date();
+  const hours = date.getHours();
+  const openHour = 12;
+  const closeHour = 22;
+  const isOpen = hours >= openHour && hours <= closeHour;
+
+  return (
+    <footer className="footer">
+      {isOpen ? (
+        <Order closeHour={closeHour} />
+      ) : (
+        <p>
+          We are happy to welcome you between {openHour}:00 and {closeHour}:00.
+        </p>
+      )}
+    </footer>
+  );
+}
+
+// ------------------------------------------------------------
+
+function Order(props) {
+  return (
+    <div className="order">
+      <p>
+        We are open until {props.closeHour}:00. Come visit us or order online.
+      </p>
+      <button className="btn">Order now</button>
+    </div>
+  );
+}
+
+// ------------------------------------------------------------
+
+const root = ReactDOM.createRoot(document.getElementById("root"));
+root.render(
+  <React.StrictMode>
+    <App />
+  </React.StrictMode>
+);
